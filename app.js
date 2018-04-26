@@ -1,8 +1,12 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-var proveedor = require('./routes/proveedor.js');
-
+var proveedor = require('./routes/proveedor');
+var facturas = require('./routes/facturas');
+var usuario = require('./routes/usuario');
+var login = require('./routes/login');
+var clientes = require('./routes/clientes.js');
+var sesiones = require('./routes/sesiones');
 
 var app = express();
 
@@ -31,6 +35,11 @@ app.use(bodyParser.json({}));
 app.use(bodyParser.urlencoded({'extended':'false'}));
 
 app.use('/proveedor', proveedor);
+app.use('/facturas', facturas);
+app.use('/usuario', usuario);
+app.use('/login', login);
+app.use('/clientes', clientes);
+app.use('/sesiones', sesiones);
 
 app.listen(3000, function(){
     console.log('Servidor ok en puerto 3000')

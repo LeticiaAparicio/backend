@@ -2,30 +2,39 @@ var express = require('express');
 var mongoose = require('mongoose');
 
 var Proveedor = require('../models/proveedor.js');
+var autentoken = require('../middleware/autentoken');
 
 var app = express();
 
+
 app.get('/', (req, res, next) => {
 
-    Proveedor.find({}).exec((err, proveedores)=>{
-        if(err){
+    var desde = req.query.desde;
+    desde = Number(desde);
+
+    Proveedor.find({}).skip(desde).limit(5).exec((err, proveedores) => {
+        if (err) {
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error acceso en base de datos',
                 errores: err
             })
         }
-        // res.status(200).json(proveedores);
-        res.status(200).json({
-            ok: true,
-            proveedores: proveedores
+
+        Proveedor.count({}, (err, totales) => {
+            // res.status(200).json(proveedores);
+            res.status(200).json({
+                ok: true,
+                proveedores: proveedores, 
+                totales: totales
+            })
         })
     });
 });
 
-app.get('/:id', function(req, res, next){
-    Proveedor.findById(req.params.id, (err, proveedor)=>{  //el método de mongoose de findById, busca el id
-        if(err){
+app.get('/:id', function (req, res, next) {
+    Proveedor.findById(req.params.id, (err, proveedor) => {  //el método de mongoose de findById, busca el id
+        if (err) {
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error acceso a la base de datos',
@@ -36,10 +45,10 @@ app.get('/:id', function(req, res, next){
             ok: true,
             proveedor: proveedor
         })
-    })  
+    })
 });
 
-app.post('/', (req, res)=>{
+app.post('/', (req, res) => {
 
     var body = req.body;
 
@@ -55,9 +64,9 @@ app.post('/', (req, res)=>{
         contacto: body.contacto
     })
 
-    proveedor.save((err, proveedorGuardado)=>{  //por una parte te manda el error y por otra el objeto que guarda
+    proveedor.save((err, proveedorGuardado) => {  //por una parte te manda el error y por otra el objeto que guarda
         //Con esos dos parámetros creamos una lógica para gestionarlo
-        if(err) {
+        if (err) {
             return res.status(400).json({
                 //metemos aquí dentro un objeto
                 ok: false,
@@ -74,10 +83,10 @@ app.post('/', (req, res)=>{
     });
 });
 
-app.put('/:id', function(req, res, next){
+app.put('/:id', function (req, res, next) {
 
-    Proveedor.findByIdAndUpdate(req.params.id, req.body, function(err, datos){ //(hace una búsqueda en la base de datos, con qué lo quiero actualizar, la función )
-        if(err) return next(err);
+    Proveedor.findByIdAndUpdate(req.params.id, req.body, function (err, datos) { //(hace una búsqueda en la base de datos, con qué lo quiero actualizar, la función )
+        if (err) return next(err);
         res.status(201).json({
             ok: true,
             mensaje: 'Proveedor actualizado'
@@ -86,16 +95,16 @@ app.put('/:id', function(req, res, next){
 
 });
 
-app.delete('/:id', function(req, res, error){
+app.delete('/:id', autentoken.verificarToken, function (req, res, error) {
 
-    Proveedor.findByIdAndRemove(req.params.id, function(err, datos){
-        if(err) return next(err);
+    Proveedor.findByIdAndRemove(req.params.id, function (err, datos) {
+        if (err) return next(err);
         //Para que nos salga el nombre el proveedor al eliminarlo
         var mensaje = 'Proveedor ' + datos.nombre + ' eliminado'
         res.status(200).json({
             ok: true,
             mensaje: mensaje
-        });    
+        });
     });
 
 });
