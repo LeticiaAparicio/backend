@@ -13,4 +13,7 @@ var ClientesSchema = new mongoose.Schema({
     contacto: String
 })
 
+ClientesSchema.plugin(unique, { message: 'El cif introducido ya existe'});
+
+
 module.exports = mongoose.model('Clientes', ClientesSchema);

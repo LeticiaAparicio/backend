@@ -5,9 +5,11 @@ var Clientes = require('../models/clientes.js');
 
 var app = express();
 
-app.get('/', (req, res, next) => {
+app.get('/:nombre', (req, res, next) => {
 
-    Clientes.find({}).exec((err, clientes)=>{
+    var nombre = req.params.nombre;
+
+    Clientes.find({nombre:{$regex:nombre,$options:'i'}}).exec((err, clientes)=>{
         if(err){
             return res.status(500).json({
                 ok: false,
@@ -15,7 +17,6 @@ app.get('/', (req, res, next) => {
                 errores: err
             })
         }
-        // res.status(200).json(clientes);
         res.status(200).json({
             ok: true,
             clientes: clientes
@@ -87,9 +88,9 @@ app.delete('/:id', function(req, res, error){
     Clientes.findByIdAndRemove(req.params.id, function(err, datos){
         if(err) return next(err);
         //Para que nos salga el nombre el proveedor al eliminarlo
-        var mensaje = 'Cliente ' + datos.nombre + ' eliminado'
+        var mensaje = 'Cliente eliminado'
         res.status(200).json({
-            ok: true,
+            ok: 'true',
             mensaje: mensaje
         });    
     });
