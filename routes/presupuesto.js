@@ -47,15 +47,11 @@ app.post('/', (req, res)=>{
 
     var presupuesto = new Presupuesto({
         cliente: body.cliente,
-        cif: body.cif,
-        domicilio: body.domicilio,
         fecha: body.fecha,
-        concepto: body.concepto,
-        base: body.base,
-        retencion: body.retencion,
+        items: body.items,
+        suma: body.suma,
         tipo: body.tipo,
-        irpf: body.irpf,
-        importe: body.importe,
+        iva: body.iva,
         total: body.total
     });
 

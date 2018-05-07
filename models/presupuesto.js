@@ -3,16 +3,12 @@ var mongoose = require('mongoose');
 
 var PresupuestoSchema = new mongoose.Schema({
     cliente: String,
-    cif: String,
-    domicilio: String,
     fecha: String,
-    concepto: String,
-    base: Number,
-    retencion: Boolean,
+    items: Array,
+    suma: Number,
     tipo: Number,
-    irpf: String,
-    importe: String,
-    total: String
+    iva: Number,
+    total: Number
 })
 
 //PresupuestoSchema.plugin(unique, { message: 'El cif introducido ya existe'});
