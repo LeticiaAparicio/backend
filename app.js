@@ -8,6 +8,7 @@ var login = require('./routes/login');
 var clientes = require('./routes/clientes.js');
 var sesiones = require('./routes/sesiones');
 var presupuesto = require('./routes/presupuesto');
+var articulo = require('./routes/articulo');
 
 var app = express();
 
@@ -29,8 +30,6 @@ app.use(function(req, res, next){
     next(); //te permite ejecutar el código que hay debajo, si no lo bloquea
 });
 
-
-
 //para poder leer los json
 app.use(bodyParser.json({}));
 app.use(bodyParser.urlencoded({'extended':'false'}));
@@ -42,6 +41,8 @@ app.use('/login', login);
 app.use('/clientes', clientes);
 app.use('/sesiones', sesiones);
 app.use('/presupuesto', presupuesto);
+app.use('/articulo', articulo);
+
 
 app.listen(3000, function(){
     console.log('Servidor ok en puerto 3000')
