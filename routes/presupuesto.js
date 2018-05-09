@@ -20,7 +20,23 @@ app.get('/', (req, res, next) => {
             presupuestos: presupuestos
         })
     });
+});
 
+app.get('/cliente', (req, res, next) => {
+
+    Presupuesto.aggregate([{$group:{_id:{cliente:"$cliente"},total:{$sum:"$total"}}}]).exec((err, datos)=>{
+        if(err){
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error acceso DB',
+                errores: err
+            })
+        }
+        res.status(200).json({
+            ok: true,
+            datos: datos
+        })
+    });
 });
 
 app.get('/:id', function(req, res, next){
