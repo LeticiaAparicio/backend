@@ -2,7 +2,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 
 var Proveedor = require('../models/proveedor.js');
-var autentoken = require('../middleware/autentoken');
+// var autentoken = require('../middleware/autentoken');
 
 var app = express();
 
@@ -95,7 +95,9 @@ app.put('/:id', function (req, res, next) {
 
 });
 
-app.delete('/:id', autentoken.verificarToken, function (req, res, error) {
+// Comentamos el token para poder borrar y hacer la paginación en la app con Ionic
+// app.delete('/:id', autentoken.verificarToken, function (req, res, error) {
+app.delete('/:id', function (req, res, error) {
 
     Proveedor.findByIdAndRemove(req.params.id, function (err, datos) {
         if (err) return next(err);
